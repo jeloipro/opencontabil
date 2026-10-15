@@ -3,12 +3,7 @@ version: '3.8'
 services:
   app:
     build: .
-    container_name: opencontabil-phoenix
+    container_name: azienda-contabil
     ports:
-      - "8005:8000"
-    environment:
-      - DATABASE_URL=sqlite:////app/data/opencontabil.db
-    volumes:
-      - ./data:/app/data
+      - "3000:3000"
     restart: unless-stopped
-

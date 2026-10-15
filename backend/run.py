@@ -27,7 +27,7 @@ if __name__ == "__main__":
         port = 8080 if is_port_in_use(8000) else 8000
 
     print("=" * 65)
-    print("   OpenContabil Phoenix rodando em:")
+    print("   Azienda Contábil rodando em:")
     print(f"   -> http://localhost:{port}")
     print(f"   -> Swagger Docs: http://localhost:{port}/docs")
     print("=" * 65)

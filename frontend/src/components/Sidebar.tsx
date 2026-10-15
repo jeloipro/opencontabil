@@ -52,13 +52,13 @@ export const Sidebar: React.FC<SidebarProps> = ({ currentTab, onSelectTab }) => 
       {/* Brand Header */}
       <div className="p-4 border-b border-slate-800 flex items-center gap-3">
         <div className="w-10 h-10 rounded-lg bg-gradient-to-tr from-blue-600 to-indigo-500 flex items-center justify-center text-white font-black text-xl shadow-md">
-          Φ
+          A
         </div>
         <div>
           <h1 className="font-bold text-white text-base tracking-wide flex items-center gap-1.5">
-            OpenContábil
+            Azienda
             <span className="text-[10px] uppercase tracking-wider bg-blue-500/20 text-blue-400 px-1.5 py-0.5 rounded font-mono font-semibold">
-              Phoenix
+              Contábil
             </span>
           </h1>
           <p className="text-xs text-slate-400">Sistema Contábil Aberto</p>

@@ -25,7 +25,7 @@ def test_db():
 def test_seed_creates_company_and_accounts(test_db):
     empresa = test_db.query(Empresa).first()
     assert empresa is not None
-    assert "PHOENIX" in empresa.razao_social
+    assert "AZIENDA" in empresa.razao_social
 
     contas = test_db.query(ContaContabil).filter(ContaContabil.empresa_id == empresa.id).all()
     assert len(contas) > 30

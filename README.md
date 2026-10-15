@@ -1,16 +1,15 @@
-# OpenContábil Phoenix 🇧🇷
+# Azienda Contábil 🇧🇷
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](https://opensource.org/licenses/MIT)
-[![Python 3.11+](https://img.shields.io/badge/Python-3.11%2B-blue.svg)](https://python.org)
-[![FastAPI](https://img.shields.io/badge/FastAPI-0.110%2B-009688.svg)](https://fastapi.tiangolo.com)
-[![React 19](https://img.shields.io/badge/React-19-61dafb.svg)](https://react.dev)
+[![Node.js 18+](https://img.shields.io/badge/Node.js-18%2B-green.svg)](https://nodejs.org)
 [![TypeScript](https://img.shields.io/badge/TypeScript-5.0%2B-3178c6.svg)](https://www.typescriptlang.org)
+[![React 19](https://img.shields.io/badge/React-19-61dafb.svg)](https://react.dev)
 [![Tailwind CSS](https://img.shields.io/badge/TailwindCSS-3.4-38bdf8.svg)](https://tailwindcss.com)
 [![SPED ECD Ready](https://img.shields.io/badge/SPED-ECD%20RFB-emerald.svg)](https://www.gov.br/receitafederal)
+[![Vercel Ready](https://img.shields.io/badge/Vercel-1--Click%20Deploy-black.svg)](https://vercel.com)
 
-> **Sistema Contábil Open Source completo e moderno**, inspirado no **Contábil Phoenix (Contmatic)**, projetado para escritórios de contabilidade e empresas com departamento contábil interno no Brasil.
-> 
-> Engenharia reversa realizada com base nas especificações legais brasileiras (CFC / CVM / RFB) e na arquitetura funcional do sistema de referência.
+> **Azienda Contábil** é um sistema contábil completo, moderno e open-source para escritórios e empresas no Brasil.
+> Construído sobre a ciência contábil aziendalista e em estrita conformidade com as normas do Conselho Federal de Contabilidade (CFC), CVM e Receita Federal do Brasil (RFB).
 
 ---
 

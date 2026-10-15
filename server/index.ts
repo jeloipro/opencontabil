@@ -22,7 +22,7 @@ if (fs.existsSync(distPath)) {
 function startServer(port: number) {
   const server = app.listen(port, () => {
     console.log("==========================================================");
-    console.log(`  OpenContabil Phoenix rodando com sucesso em:`);
+    console.log(`  Azienda Contábil rodando com sucesso em:`);
     console.log(`  -> http://localhost:${port}`);
     console.log("==========================================================");
   });

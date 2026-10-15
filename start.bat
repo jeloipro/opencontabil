@@ -1,7 +1,7 @@
 @echo off
-title OpenContabil Phoenix Fullstack
+title Azienda Contabil Fullstack
 echo ==========================================================
-echo        Iniciando OpenContabil Phoenix (Fullstack Node/TS)
+echo        Iniciando Azienda Contabil (Fullstack Node/TS)
 echo ==========================================================
 echo Backend e Frontend unificados na mesma base!
 echo Acesse: http://localhost:3000

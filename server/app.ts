@@ -15,7 +15,7 @@ app.use(express.json());
 
 // Health
 app.get("/health", (req: Request, res: Response) => {
-  res.json({ status: "ok", app: "OpenContabil Phoenix (Fullstack TypeScript)", version: "1.0.0" });
+  res.json({ status: "ok", app: "Azienda Contábil (Fullstack TypeScript)", version: "1.0.0" });
 });
 
 // --- Empresas ---

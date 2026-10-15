@@ -31,8 +31,8 @@ class DataStore {
     const emp: EmpresaModel = {
       id: 1,
       cnpj: "12.345.678/0001-90",
-      razao_social: "PHOENIX CONSULTORIA & SERVIÇOS CONTÁBEIS LTDA",
-      nome_fantasia: "Phoenix Soluções Contábeis",
+      razao_social: "AZIENDA AUDITORIA & SERVIÇOS CONTÁBEIS LTDA",
+      nome_fantasia: "Azienda Contabilidade Inteligente",
       inscricao_estadual: "111.222.333.444",
       inscricao_municipal: "555.666-7",
       regime_tributario: "SIMPLES",

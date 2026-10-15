@@ -20,7 +20,7 @@ with SessionLocal() as db:
 app = FastAPI(
     title=settings.PROJECT_NAME,
     version=settings.VERSION,
-    description="Sistema Contábil Open Source completo e moderno inspirado no Contábil Phoenix com suporte a SPED ECD, Balanço Patrimonial, DRE, DFC, Conciliação OFX e Reforma Tributária."
+    description="Sistema Contábil Open Source completo e moderno com suporte a SPED ECD, Balanço Patrimonial, DRE, DFC, Conciliação OFX e Reforma Tributária."
 )
 
 app.add_middleware(

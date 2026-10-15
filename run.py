@@ -20,7 +20,7 @@ def is_port_in_use(port: int) -> bool:
 
 def main():
     print("=" * 65)
-    print("   OpenContabil Phoenix — Sistema Contabil Open Source")
+    print("   Azienda Contabil — Sistema Contabil Open Source")
     print("=" * 65)
 
     # 1. Verificar se o frontend foi compilado
