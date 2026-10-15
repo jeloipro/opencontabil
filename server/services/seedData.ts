@@ -163,3 +163,4 @@ export const PLANO_CONTAS_PADRAO: Array<[string, number, string, "SINTETICA" | "
   ["5.2", 402, "RECEITAS FINANCEIRAS", "SINTETICA", "CREDORA", "RECEITAS", 2, "4.02"],
   ["5.2.01.001", 430, "Rendimentos de Aplicações Financeiras", "ANALITICA", "CREDORA", "RECEITAS", 4, "4.02.01.01.01"]
 ];
+

@@ -405,3 +405,4 @@ app.get("/api/v1/dashboard/:empresaId", (req: Request, res: Response) => {
 });
 
 export default app;
+
