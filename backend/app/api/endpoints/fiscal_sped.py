@@ -31,3 +31,4 @@ def validar_sped_ecd(
 @router.post("/simular-reforma", response_model=SimuladorReformaResponse)
 def simular_reforma_tributaria(dados: SimuladorReformaRequest):
     return ReformaTributariaService.simular(dados)
+

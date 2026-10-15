@@ -100,3 +100,4 @@ def excluir_lancamento(lancamento_id: int, db: Session = Depends(get_db)):
     db.delete(l)
     db.commit()
     return {"status": "sucesso", "mensagem": f"Lançamento Nº {l.numero} excluído com sucesso."}
+

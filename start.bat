@@ -5,3 +5,4 @@ echo        Iniciando OpenContabil Phoenix (Open Source)
 echo ==========================================================
 python run.py
 pause
+

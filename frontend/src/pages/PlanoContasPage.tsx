@@ -318,3 +318,4 @@ export const PlanoContasPage: React.FC<Props> = ({ empresaId }) => {
     </div>
   );
 };
+

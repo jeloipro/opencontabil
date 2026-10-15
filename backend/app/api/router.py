@@ -14,3 +14,4 @@ api_router.include_router(relatorios.router, prefix="/relatorios", tags=["Relat�
 api_router.include_router(conciliacao.router, prefix="/conciliacao", tags=["Conciliação Bancária OFX"])
 api_router.include_router(fiscal_sped.router, prefix="/fiscal-sped", tags=["SPED ECD & Reforma Tributária"])
 api_router.include_router(dashboard.router, prefix="/dashboard", tags=["Dashboard Executivo"])
+

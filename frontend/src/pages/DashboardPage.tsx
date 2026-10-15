@@ -297,3 +297,4 @@ export const DashboardPage: React.FC<Props> = ({ empresaId, onNavigate }) => {
     </div>
   );
 };
+

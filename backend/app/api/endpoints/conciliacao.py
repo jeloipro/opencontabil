@@ -103,3 +103,4 @@ def criar_regra(empresa_id: int, payload: RegraConciliacaoCreate, db: Session = 
     db.commit()
     db.refresh(regra)
     return regra
+

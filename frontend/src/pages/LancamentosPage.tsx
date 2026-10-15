@@ -226,3 +226,4 @@ export const LancamentosPage: React.FC<Props> = ({ empresaId, onOpenNovoLancamen
     </div>
   );
 };
+

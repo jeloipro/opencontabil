@@ -182,3 +182,4 @@ export const BalancetePage: React.FC<Props> = ({ empresaId }) => {
     </div>
   );
 };
+

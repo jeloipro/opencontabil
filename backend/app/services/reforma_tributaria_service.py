@@ -114,3 +114,4 @@ class ReformaTributariaService:
             credito_cbs_ibs_mensal=round(credito_mensal_total, 2),
             diagnostico=diagnostico
         )
+

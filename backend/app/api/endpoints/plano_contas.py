@@ -52,3 +52,4 @@ def criar_conta(empresa_id: int, payload: ContaContabilCreate, db: Session = Dep
     db.commit()
     db.refresh(conta)
     return conta
+

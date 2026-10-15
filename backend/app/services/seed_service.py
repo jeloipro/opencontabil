@@ -274,3 +274,4 @@ def seed_database(db: Session):
     db.add_all([p17, p18])
 
     db.commit()
+

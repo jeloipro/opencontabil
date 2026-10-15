@@ -76,3 +76,4 @@ def get_dashboard_data(empresa_id: int, db: Session = Depends(get_db)):
         "evolucao_mensal": evolucao_meses,
         "ultimos_lancamentos": ultimos
     }
+

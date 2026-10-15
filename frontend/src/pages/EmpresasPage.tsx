@@ -223,3 +223,4 @@ export const EmpresasPage: React.FC<Props> = ({
     </div>
   );
 };
+

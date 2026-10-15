@@ -243,3 +243,4 @@ export const ReformaTributariaPage: React.FC<Props> = ({ empresaId }) => {
     </div>
   );
 };
+

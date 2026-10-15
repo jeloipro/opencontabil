@@ -189,3 +189,4 @@ export const SpedPage: React.FC<Props> = ({ empresaId }) => {
     </div>
   );
 };
+

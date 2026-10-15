@@ -144,3 +144,4 @@ def test_reforma_tributaria_simulacao():
     assert res.tributacao_atual["total_mensal"] > 0
     assert res.tributacao_nova_reforma["total_mensal"] > 0
     assert res.credito_cbs_ibs_mensal > 0
+

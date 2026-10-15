@@ -14,3 +14,4 @@ class Settings(BaseSettings):
     model_config = SettingsConfigDict(case_sensitive=True)
 
 settings = Settings()
+

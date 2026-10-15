@@ -25,3 +25,4 @@ def criar_centro_custo(empresa_id: int, payload: CentroCustoCreate, db: Session 
     db.commit()
     db.refresh(cc)
     return cc
+

@@ -179,3 +179,4 @@ export const BalancoPatrimonialPage: React.FC<Props> = ({ empresaId }) => {
     </div>
   );
 };
+

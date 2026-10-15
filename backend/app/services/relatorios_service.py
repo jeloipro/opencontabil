@@ -247,3 +247,4 @@ class RelatoriosService:
             "total_passivo_pl": bp.total_passivo_pl,
             "balanceado": bp.balanceado
         }
+

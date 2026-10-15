@@ -28,3 +28,4 @@ RUN mkdir -p /app/data
 EXPOSE 8000
 
 CMD ["python", "backend/run.py"]
+

@@ -60,3 +60,4 @@ def test_simular_reforma():
     assert res.status_code == 200
     assert "tributacao_atual" in res.json()
     assert "tributacao_nova_reforma" in res.json()
+

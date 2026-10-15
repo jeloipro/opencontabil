@@ -62,3 +62,4 @@ def atualizar_empresa(empresa_id: int, payload: EmpresaUpdate, db: Session = Dep
     db.commit()
     db.refresh(empresa)
     return empresa
+

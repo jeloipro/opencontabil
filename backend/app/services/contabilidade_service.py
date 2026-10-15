@@ -66,3 +66,4 @@ class ContabilidadeService:
         db.commit()
         db.refresh(lancamento)
         return lancamento
+
