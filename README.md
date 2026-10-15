@@ -65,44 +65,48 @@
 
 ---
 
-## 🛠️ Stack Tecnológica
+## 🛠️ Stack Tecnológica Unificada (100% TypeScript)
+
+Todo o sistema foi unificado em uma **única base full-stack TypeScript** para máxima compatibilidade local e deploy instantâneo no **Vercel**:
 
 | Camada | Tecnologia |
 |---|---|
-| **Backend** | Python 3.11+, FastAPI, SQLAlchemy, Pydantic v2, Uvicorn |
-| **Banco de Dados** | SQLite (zero-config, embutido) ou PostgreSQL |
-| **Frontend** | React 19, TypeScript, Vite, Tailwind CSS, Lucide Icons |
-| **Testes** | Pytest, TestClient (100% dos testes passando) |
-| **Deploy** | Docker, Docker Compose, scripts portáveis `.bat` e `.sh` |
+| **Linguagem Única** | TypeScript 5.3+ |
+| **Backend & API** | Node.js, Express, Vercel Serverless Functions (`api/index.ts`) |
+| **Frontend** | React 19, Vite, Tailwind CSS, Lucide Icons |
+| **Banco & Camada de Serviços** | Repositório em memória com persistência e auto-provisionamento de dados |
+| **Deploy** | 1-Click Deploy no Vercel (`vercel.json`), Docker, Scripts `.bat` e `.sh` |
 
 ---
 
-## 🚀 Como Executar
+## 🚀 Como Executar Localmente (1 Comando)
 
-### Pré-requisitos
-- **Python 3.11+**
-- **Node.js 18+** e npm (apenas caso queira compilar o frontend a partir do código-fonte)
+Basta ter o **Node.js 18+** instalado:
 
-### 1. Inicialização Rápida (1 Comando)
-
-No Windows:
-```cmd
-start.bat
-```
-
-No Linux / macOS:
 ```bash
-chmod +x start.sh
-./start.sh
+npm install
+npm run dev
 ```
 
-Ou diretamente via Python:
-```bash
-python run.py
-```
+*(Ou simplesmente dê dois cliques no arquivo `start.bat` no Windows)*
 
-O sistema compilará o frontend (se necessário) e iniciará o servidor unificado em:
-👉 **http://localhost:8000**
+O sistema iniciará o **Backend e o Frontend juntos** na mesma porta:
+👉 **http://localhost:3000**
+
+---
+
+## ☁️ Deploy no Vercel (1 Clique)
+
+O projeto já possui o `vercel.json` e a Serverless Function `api/index.ts` configurados na raiz:
+
+1. Faça o push do projeto para o seu GitHub:
+   ```bash
+   git remote add origin https://github.com/SEU_USUARIO/SEU_REPOSITORIO.git
+   git push -u origin main
+   ```
+2. Acesse **[vercel.com/new](https://vercel.com/new)** e conecte seu repositório.
+3. Clique em **"Deploy"** (não precisa alterar nenhuma configuração).
+4. O Vercel gerará automaticamente o link público (ex: `https://opencontabil-phoenix.vercel.app`) com o front e o back funcionando juntos!
 
 ---
 

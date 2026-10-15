@@ -1,6 +1,7 @@
 #!/usr/bin/env bash
 echo "=========================================================="
-echo "       Iniciando OpenContabil Phoenix (Open Source)"
+echo "       Iniciando OpenContabil Phoenix (Fullstack Node/TS)"
 echo "=========================================================="
-python3 run.py
-
+echo "Backend e Frontend unificados na mesma base!"
+echo "Acesse: http://localhost:3000"
+npm run dev

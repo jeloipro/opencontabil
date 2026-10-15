@@ -1,8 +1,10 @@
 @echo off
-title OpenContabil Phoenix
+title OpenContabil Phoenix Fullstack
 echo ==========================================================
-echo        Iniciando OpenContabil Phoenix (Open Source)
+echo        Iniciando OpenContabil Phoenix (Fullstack Node/TS)
 echo ==========================================================
-python run.py
+echo Backend e Frontend unificados na mesma base!
+echo Acesse: http://localhost:3000
+echo.
+npm run dev
 pause
-
