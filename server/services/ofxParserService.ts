@@ -57,10 +57,10 @@ export class OFXParserService {
         conta_bancaria_id: contaBancariaId,
         fitid: item.fitid,
         data: item.data,
-        tipo: item.sinal > 0 ? "CREDIT" : "DEBIT",
+        tipo: (item.sinal > 0 ? "CREDIT" : "DEBIT") as "CREDIT" | "DEBIT",
         valor: item.valor,
         memo: item.memo,
-        status: "PENDENTE" as const,
+        status: "PENDENTE" as "PENDENTE" | "CONCILIADO" | "IGNORADO",
         lancamento_id: null as number | null,
       };
       db.transacoesOFX.push(trn);

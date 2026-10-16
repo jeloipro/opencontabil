@@ -7,7 +7,7 @@
     "frontend"
   ],
   "scripts": {
-    "build": "npm --prefix frontend install && npm --prefix frontend run build",
+    "build": "npm --prefix frontend run build",
     "start": "tsx server/index.ts",
     "dev": "tsx server/index.ts",
     "dev:front": "cd frontend && npm run dev"
