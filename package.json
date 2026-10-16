@@ -6,6 +6,9 @@
   "workspaces": [
     "frontend"
   ],
+  "overrides": {
+    "tailwindcss": "3.4.17"
+  },
   "scripts": {
     "build": "npm --prefix frontend run build",
     "start": "tsx server/index.ts",
