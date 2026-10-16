@@ -13,23 +13,42 @@ export const app = express();
 app.use(cors());
 app.use(express.json());
 
-// Health
-app.get("/health", (req: Request, res: Response) => {
-  res.json({ status: "ok", app: "Azienda Contábil (Fullstack TypeScript)", version: "1.0.0" });
+// Normalização de URL para Vercel Serverless
+app.use((req, res, next) => {
+  const forwarded = (req.headers["x-forwarded-uri"] as string) || (req.headers["x-matched-path"] as string);
+  if (forwarded && (forwarded.includes("/v1") || forwarded.includes("/empresas"))) {
+    req.url = forwarded;
+  }
+  if (req.url.startsWith("/api/index")) {
+    req.url = req.url.replace(/^\/api\/index(\.ts|\.js)?/, "/api");
+  }
+  next();
 });
 
+// Health checks
+const healthHandler = (_req: Request, res: Response) => {
+  res.json({ status: "ok", app: "Azienda Contábil (Fullstack TypeScript)", version: "1.0.0" });
+};
+app.get("/health", healthHandler);
+app.get("/api/health", healthHandler);
+
+// Router com todos os endpoints contábeis
+export const apiRouter = express.Router();
+
+apiRouter.get("/health", healthHandler);
+
 // --- Empresas ---
-app.get("/api/v1/empresas", (req: Request, res: Response) => {
+apiRouter.get(["/empresas", "/empresas/"], (_req: Request, res: Response) => {
   res.json(db.empresas);
 });
 
-app.get("/api/v1/empresas/:id", (req: Request, res: Response) => {
+apiRouter.get("/empresas/:id", (req: Request, res: Response) => {
   const emp = db.empresas.find((e) => e.id === Number(req.params.id));
   if (!emp) return res.status(404).json({ detail: "Empresa não encontrada" });
   res.json(emp);
 });
 
-app.post("/api/v1/empresas", (req: Request, res: Response) => {
+apiRouter.post(["/empresas", "/empresas/"], (req: Request, res: Response) => {
   const { cnpj, razao_social, nome_fantasia, regime_tributario, cidade, uf } = req.body;
   if (db.empresas.some((e) => e.cnpj === cnpj)) {
     return res.status(400).json({ detail: "CNPJ já cadastrado." });
@@ -72,7 +91,7 @@ app.post("/api/v1/empresas", (req: Request, res: Response) => {
 });
 
 // --- Plano de Contas ---
-app.get("/api/v1/plano-contas/:empresaId", (req: Request, res: Response) => {
+apiRouter.get(["/plano-contas/:empresaId", "/plano-contas/:empresaId/"], (req: Request, res: Response) => {
   const empresaId = Number(req.params.empresaId);
   const tipo = req.query.tipo as string;
   let contas = db.contas.filter((c) => c.empresa_id === empresaId && c.ativa);
@@ -83,7 +102,7 @@ app.get("/api/v1/plano-contas/:empresaId", (req: Request, res: Response) => {
   res.json(contas);
 });
 
-app.post("/api/v1/plano-contas/:empresaId", (req: Request, res: Response) => {
+apiRouter.post(["/plano-contas/:empresaId", "/plano-contas/:empresaId/"], (req: Request, res: Response) => {
   const empresaId = Number(req.params.empresaId);
   const nextId = (Math.max(0, ...db.contas.map((c) => c.id)) || 0) + 1;
   const novaConta = { id: nextId, empresa_id: empresaId, ...req.body };
@@ -92,14 +111,14 @@ app.post("/api/v1/plano-contas/:empresaId", (req: Request, res: Response) => {
 });
 
 // --- Centros de Custo ---
-app.get("/api/v1/centros-custo/:empresaId", (req: Request, res: Response) => {
+apiRouter.get(["/centros-custo/:empresaId", "/centros-custo/:empresaId/"], (req: Request, res: Response) => {
   const empresaId = Number(req.params.empresaId);
   const ccs = db.centrosCusto.filter((cc) => cc.empresa_id === empresaId && cc.ativo);
   res.json(ccs);
 });
 
 // --- Lançamentos ---
-app.get("/api/v1/lancamentos/:empresaId", (req: Request, res: Response) => {
+apiRouter.get(["/lancamentos/:empresaId", "/lancamentos/:empresaId/"], (req: Request, res: Response) => {
   const empresaId = Number(req.params.empresaId);
   const dataInicio = req.query.data_inicio as string;
   const dataFim = req.query.data_fim as string;
@@ -127,7 +146,7 @@ app.get("/api/v1/lancamentos/:empresaId", (req: Request, res: Response) => {
   res.json(resList);
 });
 
-app.post("/api/v1/lancamentos/:empresaId", (req: Request, res: Response) => {
+apiRouter.post(["/lancamentos/:empresaId", "/lancamentos/:empresaId/"], (req: Request, res: Response) => {
   try {
     const empresaId = Number(req.params.empresaId);
     const lanc = ContabilidadeService.criarLancamento(empresaId, req.body);
@@ -143,7 +162,7 @@ app.post("/api/v1/lancamentos/:empresaId", (req: Request, res: Response) => {
   }
 });
 
-app.delete("/api/v1/lancamentos/:id", (req: Request, res: Response) => {
+apiRouter.delete("/lancamentos/:id", (req: Request, res: Response) => {
   const id = Number(req.params.id);
   const idx = db.lancamentos.findIndex((l) => l.id === id);
   if (idx === -1) return res.status(404).json({ detail: "Lançamento não encontrado." });
@@ -154,27 +173,27 @@ app.delete("/api/v1/lancamentos/:id", (req: Request, res: Response) => {
 });
 
 // --- Relatórios ---
-app.get("/api/v1/relatorios/balancete/:empresaId", (req: Request, res: Response) => {
+apiRouter.get(["/relatorios/balancete/:empresaId", "/relatorios/balancete/:empresaId/"], (req: Request, res: Response) => {
   const empresaId = Number(req.params.empresaId);
   const dataIni = (req.query.data_inicio as string) || "2026-01-01";
   const dataFim = (req.query.data_fim as string) || "2026-12-31";
   res.json(RelatoriosService.gerarBalancete(empresaId, dataIni, dataFim));
 });
 
-app.get("/api/v1/relatorios/balanco-patrimonial/:empresaId", (req: Request, res: Response) => {
+apiRouter.get(["/relatorios/balanco-patrimonial/:empresaId", "/relatorios/balanco-patrimonial/:empresaId/"], (req: Request, res: Response) => {
   const empresaId = Number(req.params.empresaId);
   const dataPosicao = (req.query.data_posicao as string) || "2026-12-31";
   res.json(RelatoriosService.gerarBalancoPatrimonial(empresaId, dataPosicao));
 });
 
-app.get("/api/v1/relatorios/dre/:empresaId", (req: Request, res: Response) => {
+apiRouter.get(["/relatorios/dre/:empresaId", "/relatorios/dre/:empresaId/"], (req: Request, res: Response) => {
   const empresaId = Number(req.params.empresaId);
   const dataIni = (req.query.data_inicio as string) || "2026-01-01";
   const dataFim = (req.query.data_fim as string) || "2026-12-31";
   res.json(RelatoriosService.gerarDRE(empresaId, dataIni, dataFim));
 });
 
-app.get("/api/v1/relatorios/livro-diario/:empresaId", (req: Request, res: Response) => {
+apiRouter.get(["/relatorios/livro-diario/:empresaId", "/relatorios/livro-diario/:empresaId/"], (req: Request, res: Response) => {
   const empresaId = Number(req.params.empresaId);
   const emp = db.empresas.find((e) => e.id === empresaId);
   const dataIni = (req.query.data_inicio as string) || "2026-01-01";
@@ -217,7 +236,7 @@ app.get("/api/v1/relatorios/livro-diario/:empresaId", (req: Request, res: Respon
   });
 });
 
-app.get("/api/v1/relatorios/livro-razao/:empresaId", (req: Request, res: Response) => {
+apiRouter.get(["/relatorios/livro-razao/:empresaId", "/relatorios/livro-razao/:empresaId/"], (req: Request, res: Response) => {
   const empresaId = Number(req.params.empresaId);
   const contaId = req.query.conta_id ? Number(req.query.conta_id) : undefined;
   const dataIni = (req.query.data_inicio as string) || "2026-01-01";
@@ -276,20 +295,20 @@ app.get("/api/v1/relatorios/livro-razao/:empresaId", (req: Request, res: Respons
 });
 
 // --- Conciliação OFX ---
-app.get("/api/v1/conciliacao/transacoes/:empresaId", (req: Request, res: Response) => {
+apiRouter.get(["/conciliacao/transacoes/:empresaId", "/conciliacao/transacoes/:empresaId/"], (req: Request, res: Response) => {
   const empresaId = Number(req.params.empresaId);
   const trns = db.transacoesOFX.filter((t) => t.empresa_id === empresaId);
   res.json(trns);
 });
 
-app.post("/api/v1/conciliacao/importar-ofx-texto/:empresaId", (req: Request, res: Response) => {
+apiRouter.post(["/conciliacao/importar-ofx-texto/:empresaId", "/conciliacao/importar-ofx-texto/:empresaId/"], (req: Request, res: Response) => {
   const empresaId = Number(req.params.empresaId);
   const { conta_bancaria_id, conteudo_ofx } = req.body;
   const result = OFXParserService.importarEProcessar(empresaId, conta_bancaria_id, conteudo_ofx);
   res.json(result);
 });
 
-app.post("/api/v1/conciliacao/conciliar/:transacaoId", (req: Request, res: Response) => {
+apiRouter.post(["/conciliacao/conciliar/:transacaoId", "/conciliacao/conciliar/:transacaoId/"], (req: Request, res: Response) => {
   const id = Number(req.params.transacaoId);
   const trn = db.transacoesOFX.find((t) => t.id === id);
   if (!trn) return res.status(404).json({ detail: "Transação não encontrada" });
@@ -321,7 +340,7 @@ app.post("/api/v1/conciliacao/conciliar/:transacaoId", (req: Request, res: Respo
 });
 
 // --- Fiscal / SPED ---
-app.get("/api/v1/fiscal-sped/exportar-ecd/:empresaId", (req: Request, res: Response) => {
+apiRouter.get(["/fiscal-sped/exportar-ecd/:empresaId", "/fiscal-sped/exportar-ecd/:empresaId/"], (req: Request, res: Response) => {
   const empresaId = Number(req.params.empresaId);
   const ano = req.query.ano ? Number(req.query.ano) : 2026;
   const txt = SpedEcdService.gerarArquivoSped(empresaId, ano);
@@ -331,18 +350,18 @@ app.get("/api/v1/fiscal-sped/exportar-ecd/:empresaId", (req: Request, res: Respo
   res.send(txt);
 });
 
-app.get("/api/v1/fiscal-sped/validar-ecd/:empresaId", (req: Request, res: Response) => {
+apiRouter.get(["/fiscal-sped/validar-ecd/:empresaId", "/fiscal-sped/validar-ecd/:empresaId/"], (req: Request, res: Response) => {
   const empresaId = Number(req.params.empresaId);
   const ano = req.query.ano ? Number(req.query.ano) : 2026;
   res.json(SpedEcdService.validarConsistencia(empresaId, ano));
 });
 
-app.post("/api/v1/fiscal-sped/simular-reforma", (req: Request, res: Response) => {
+apiRouter.post(["/fiscal-sped/simular-reforma", "/fiscal-sped/simular-reforma/"], (req: Request, res: Response) => {
   res.json(ReformaTributariaService.simular(req.body));
 });
 
 // --- Dashboard ---
-app.get("/api/v1/dashboard/:empresaId", (req: Request, res: Response) => {
+apiRouter.get(["/dashboard/:empresaId", "/dashboard/:empresaId/"], (req: Request, res: Response) => {
   const empresaId = Number(req.params.empresaId);
   const emp = db.empresas.find((e) => e.id === empresaId);
   if (!emp) return res.status(404).json({ detail: "Empresa não encontrada" });
@@ -404,5 +423,10 @@ app.get("/api/v1/dashboard/:empresaId", (req: Request, res: Response) => {
   });
 });
 
-export default app;
+// Registra em múltiplos prefixos para garantir funcionamento em qualquer rewrite da Vercel
+app.use("/api/v1", apiRouter);
+app.use("/v1", apiRouter);
+app.use("/api", apiRouter);
+app.use("/", apiRouter);
 
+export default app;

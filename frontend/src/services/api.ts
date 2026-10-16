@@ -1,5 +1,13 @@
 const API_BASE = (import.meta.env.VITE_API_URL ? import.meta.env.VITE_API_URL.replace(/\/$/, "") : "") + "/api/v1";
 
+export function buildUrl(path: string): URL {
+  const base = API_BASE.startsWith("http")
+    ? API_BASE
+    : (typeof window !== "undefined" ? window.location.origin : "http://localhost:3000") + API_BASE;
+  const cleanPath = path.startsWith("/") ? path : `/${path}`;
+  return new URL(base + cleanPath);
+}
+
 export interface Empresa {
   id: number;
   cnpj: string;
@@ -123,15 +131,25 @@ export interface TransacaoOFX {
 export const api = {
   // Empresas
   async getEmpresas(): Promise<Empresa[]> {
-    const res = await fetch(`${API_BASE}/empresas/`);
-    return res.json();
+    try {
+      const res = await fetch(buildUrl("/empresas").toString());
+      if (!res.ok) {
+        console.error("Erro getEmpresas:", res.status, res.statusText);
+        return [];
+      }
+      return await res.json();
+    } catch (e) {
+      console.error("Falha ao buscar empresas:", e);
+      return [];
+    }
   },
   async getEmpresa(id: number): Promise<Empresa> {
-    const res = await fetch(`${API_BASE}/empresas/${id}`);
+    const res = await fetch(buildUrl(`/empresas/${id}`).toString());
+    if (!res.ok) throw new Error("Empresa não encontrada");
     return res.json();
   },
   async createEmpresa(data: Partial<Empresa>): Promise<Empresa> {
-    const res = await fetch(`${API_BASE}/empresas/`, {
+    const res = await fetch(buildUrl("/empresas").toString(), {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(data),
@@ -142,13 +160,19 @@ export const api = {
 
   // Plano de Contas
   async getPlanoContas(empresaId: number, tipo?: string): Promise<ContaContabil[]> {
-    const url = new URL(`${API_BASE}/plano-contas/${empresaId}`);
-    if (tipo) url.searchParams.append("tipo", tipo);
-    const res = await fetch(url.toString());
-    return res.json();
+    try {
+      const url = buildUrl(`/plano-contas/${empresaId}`);
+      if (tipo) url.searchParams.append("tipo", tipo);
+      const res = await fetch(url.toString());
+      if (!res.ok) return [];
+      return await res.json();
+    } catch (e) {
+      console.error("Falha ao buscar plano de contas:", e);
+      return [];
+    }
   },
   async createConta(empresaId: number, data: Partial<ContaContabil>): Promise<ContaContabil> {
-    const res = await fetch(`${API_BASE}/plano-contas/${empresaId}`, {
+    const res = await fetch(buildUrl(`/plano-contas/${empresaId}`).toString(), {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(data),
@@ -159,20 +183,32 @@ export const api = {
 
   // Centros de Custo
   async getCentrosCusto(empresaId: number): Promise<CentroCusto[]> {
-    const res = await fetch(`${API_BASE}/centros-custo/${empresaId}`);
-    return res.json();
+    try {
+      const res = await fetch(buildUrl(`/centros-custo/${empresaId}`).toString());
+      if (!res.ok) return [];
+      return await res.json();
+    } catch (e) {
+      console.error("Falha ao buscar centros de custo:", e);
+      return [];
+    }
   },
 
   // Lançamentos
   async getLancamentos(empresaId: number, dataInicio?: string, dataFim?: string): Promise<Lancamento[]> {
-    const url = new URL(`${API_BASE}/lancamentos/${empresaId}`);
-    if (dataInicio) url.searchParams.append("data_inicio", dataInicio);
-    if (dataFim) url.searchParams.append("data_fim", dataFim);
-    const res = await fetch(url.toString());
-    return res.json();
+    try {
+      const url = buildUrl(`/lancamentos/${empresaId}`);
+      if (dataInicio) url.searchParams.append("data_inicio", dataInicio);
+      if (dataFim) url.searchParams.append("data_fim", dataFim);
+      const res = await fetch(url.toString());
+      if (!res.ok) return [];
+      return await res.json();
+    } catch (e) {
+      console.error("Falha ao buscar lançamentos:", e);
+      return [];
+    }
   },
   async createLancamento(empresaId: number, data: any): Promise<Lancamento> {
-    const res = await fetch(`${API_BASE}/lancamentos/${empresaId}`, {
+    const res = await fetch(buildUrl(`/lancamentos/${empresaId}`).toString(), {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(data),
@@ -181,56 +217,67 @@ export const api = {
     return res.json();
   },
   async deleteLancamento(id: number): Promise<any> {
-    const res = await fetch(`${API_BASE}/lancamentos/${id}`, { method: "DELETE" });
+    const res = await fetch(buildUrl(`/lancamentos/${id}`).toString(), { method: "DELETE" });
     return res.json();
   },
 
   // Relatórios
   async getBalancete(empresaId: number, dataInicio?: string, dataFim?: string): Promise<BalanceteData> {
-    const url = new URL(`${API_BASE}/relatorios/balancete/${empresaId}`);
+    const url = buildUrl(`/relatorios/balancete/${empresaId}`);
     if (dataInicio) url.searchParams.append("data_inicio", dataInicio);
     if (dataFim) url.searchParams.append("data_fim", dataFim);
     const res = await fetch(url.toString());
+    if (!res.ok) throw new Error("Erro ao gerar Balancete");
     return res.json();
   },
   async getBalanco(empresaId: number, dataPosicao?: string): Promise<BalancoData> {
-    const url = new URL(`${API_BASE}/relatorios/balanco-patrimonial/${empresaId}`);
+    const url = buildUrl(`/relatorios/balanco-patrimonial/${empresaId}`);
     if (dataPosicao) url.searchParams.append("data_posicao", dataPosicao);
     const res = await fetch(url.toString());
+    if (!res.ok) throw new Error("Erro ao gerar Balanço Patrimonial");
     return res.json();
   },
   async getDRE(empresaId: number, dataInicio?: string, dataFim?: string): Promise<DREData> {
-    const url = new URL(`${API_BASE}/relatorios/dre/${empresaId}`);
+    const url = buildUrl(`/relatorios/dre/${empresaId}`);
     if (dataInicio) url.searchParams.append("data_inicio", dataInicio);
     if (dataFim) url.searchParams.append("data_fim", dataFim);
     const res = await fetch(url.toString());
+    if (!res.ok) throw new Error("Erro ao gerar DRE");
     return res.json();
   },
   async getLivroDiario(empresaId: number, dataInicio?: string, dataFim?: string): Promise<any> {
-    const url = new URL(`${API_BASE}/relatorios/livro-diario/${empresaId}`);
+    const url = buildUrl(`/relatorios/livro-diario/${empresaId}`);
     if (dataInicio) url.searchParams.append("data_inicio", dataInicio);
     if (dataFim) url.searchParams.append("data_fim", dataFim);
     const res = await fetch(url.toString());
+    if (!res.ok) throw new Error("Erro ao gerar Livro Diário");
     return res.json();
   },
   async getLivroRazao(empresaId: number, contaId?: number, dataInicio?: string, dataFim?: string): Promise<any[]> {
-    const url = new URL(`${API_BASE}/relatorios/livro-razao/${empresaId}`);
+    const url = buildUrl(`/relatorios/livro-razao/${empresaId}`);
     if (contaId) url.searchParams.append("conta_id", contaId.toString());
     if (dataInicio) url.searchParams.append("data_inicio", dataInicio);
     if (dataFim) url.searchParams.append("data_fim", dataFim);
     const res = await fetch(url.toString());
+    if (!res.ok) throw new Error("Erro ao gerar Livro Razão");
     return res.json();
   },
 
   // Conciliação Bancária
   async getTransacoesOFX(empresaId: number, status?: string): Promise<TransacaoOFX[]> {
-    const url = new URL(`${API_BASE}/conciliacao/transacoes/${empresaId}`);
-    if (status) url.searchParams.append("status", status);
-    const res = await fetch(url.toString());
-    return res.json();
+    try {
+      const url = buildUrl(`/conciliacao/transacoes/${empresaId}`);
+      if (status) url.searchParams.append("status", status);
+      const res = await fetch(url.toString());
+      if (!res.ok) return [];
+      return await res.json();
+    } catch (e) {
+      console.error("Falha ao buscar transações OFX:", e);
+      return [];
+    }
   },
   async importarOFXTexto(empresaId: number, contaBancariaId: number, conteudoOfx: string): Promise<any> {
-    const res = await fetch(`${API_BASE}/conciliacao/importar-ofx-texto/${empresaId}`, {
+    const res = await fetch(buildUrl(`/conciliacao/importar-ofx-texto/${empresaId}`).toString(), {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ conta_bancaria_id: contaBancariaId, conteudo_ofx: conteudoOfx }),
@@ -238,7 +285,7 @@ export const api = {
     return res.json();
   },
   async conciliarTransacao(transacaoId: number, data: { conta_contrapartida_id: number; historico: string; centro_custo_id?: number }): Promise<any> {
-    const res = await fetch(`${API_BASE}/conciliacao/conciliar/${transacaoId}`, {
+    const res = await fetch(buildUrl(`/conciliacao/conciliar/${transacaoId}`).toString(), {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(data),
@@ -249,14 +296,14 @@ export const api = {
 
   // Fiscal / SPED
   getSpedEcdUrl(empresaId: number, ano: number = 2026): string {
-    return `${API_BASE}/fiscal-sped/exportar-ecd/${empresaId}?ano=${ano}`;
+    return buildUrl(`/fiscal-sped/exportar-ecd/${empresaId}?ano=${ano}`).toString();
   },
   async validarSpedECD(empresaId: number, ano: number = 2026): Promise<any> {
-    const res = await fetch(`${API_BASE}/fiscal-sped/validar-ecd/${empresaId}?ano=${ano}`);
+    const res = await fetch(buildUrl(`/fiscal-sped/validar-ecd/${empresaId}?ano=${ano}`).toString());
     return res.json();
   },
   async simularReforma(data: any): Promise<any> {
-    const res = await fetch(`${API_BASE}/fiscal-sped/simular-reforma`, {
+    const res = await fetch(buildUrl("/fiscal-sped/simular-reforma").toString(), {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(data),
@@ -266,7 +313,7 @@ export const api = {
 
   // Dashboard
   async getDashboard(empresaId: number): Promise<any> {
-    const res = await fetch(`${API_BASE}/dashboard/${empresaId}`);
+    const res = await fetch(buildUrl(`/dashboard/${empresaId}`).toString());
     if (!res.ok) throw new Error("Erro ao carregar dados do dashboard");
     return res.json();
   },
