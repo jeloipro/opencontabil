@@ -8,7 +8,7 @@
 [![SPED ECD Ready](https://img.shields.io/badge/SPED-ECD%20RFB-emerald.svg)](https://www.gov.br/receitafederal)
 [![Vercel Ready](https://img.shields.io/badge/Vercel-1--Click%20Deploy-black.svg)](https://vercel.com)
 
-> **Azienda Contábil** é um sistema contábil completo, moderno e open-source para escritórios e empresas no Brasil.
+> **Azienda Contábil** é um sistema contábil completo teste, moderno e open-source para escritórios e empresas no Brasil.
 > Construído sobre a ciência contábil aziendalista e em estrita conformidade com as normas do Conselho Federal de Contabilidade (CFC), CVM e Receita Federal do Brasil (RFB).
 
 ---
